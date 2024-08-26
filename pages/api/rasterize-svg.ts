@@ -31,11 +31,11 @@ export default async function handler(
     // Convert SVG string to a rasterized PNG
     const imageBuffer = await sharp(Buffer.from(svg))
       .resize(width, height)
-      .webp()
+      .png()
       .toBuffer();
 
-    // Set the response content type to image/webp
-    res.setHeader("Content-Type", "image/webp");
+    // Set the response content type to image/png
+    res.setHeader("Content-Type", "image/png");
     res.status(200).send(imageBuffer);
   } catch (error) {
     console.error(error);
