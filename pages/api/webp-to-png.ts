@@ -17,8 +17,15 @@ export default async function handler(
       const base64Data = webpBase64.replace(/^data:image\/webp;base64,/, "");
       const webpBuffer = Buffer.from(base64Data, "base64");
 
-      // Convert WEBP to PNG using sharp
-      const pngBuffer = await sharp(webpBuffer).png().toBuffer();
+      // Convert WEBP to PNG using sharp and resize with max 640x640, maintaining aspect ratio
+      const pngBuffer = await sharp(webpBuffer)
+        .resize({
+          width: 640,
+          height: 640,
+          fit: "inside", // Ensures the image fits within the 640x640 box without changing the aspect ratio
+        })
+        .png()
+        .toBuffer();
 
       // Encode the PNG buffer to a base64 string
       const pngBase64 = pngBuffer.toString("base64");
