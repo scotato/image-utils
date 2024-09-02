@@ -6,16 +6,21 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "xbr-test": "tsx scripts/xbr-test.ts"
   },
   "dependencies": {
     "next": "14.2.6",
+    "node-fetch": "^3.3.2",
     "react": "^18",
     "react-dom": "^18",
-    "sharp": "^0.33.5"
+    "sharp": "^0.33.5",
+    "svg2img": "1.0.0-beta.2",
+    "xbr-js": "^2.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/node-fetch": "^2.6.11",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/sharp": "^0.32.0",
@@ -23,6 +28,7 @@
     "eslint-config-next": "14.2.6",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.19.0",
     "typescript": "^5"
   }
 }
