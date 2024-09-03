@@ -58,8 +58,8 @@ export default async function handler(
       .toBuffer();
 
     // Convert the raw buffer to a Uint32Array in ARGB format
-    const width = 256;
-    const height = 256;
+    const width = 512;
+    const height = 512;
     const uint32Array = new Uint32Array(new Uint8Array(resizedBuffer).buffer);
 
     // Apply 4x XBR upscaling
@@ -76,11 +76,11 @@ export default async function handler(
     const finalImage = await sharp(scaledImageBuffer, {
       raw: { width: 1024, height: 1024, channels: 4 },
     })
-      .webp()
+      .png()
       .toBuffer();
 
     // Send the final WebP image back
-    res.setHeader("Content-Type", "image/webp");
+    res.setHeader("Content-Type", "image/png");
     res.send(finalImage);
   } catch (error) {
     console.error("Error processing image:", error);
