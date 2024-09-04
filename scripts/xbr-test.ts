@@ -3,13 +3,15 @@ import fs from "fs";
 import path from "path";
 
 // Define the path to the SVG file
-const svgFilePath = path.join(__dirname, "../public/itemshop.svg");
+const svgFilePath = path.join(__dirname, "../public/itemshop-modelo.svg");
 
 // Read the SVG string from the file
 const svgString = fs.readFileSync(svgFilePath, "utf-8");
 
 // Define the endpoint URL
-const endpointUrl = "http://localhost:3000/api/xbr";
+
+const endpointUrl = "https://baby-image-utils.vercel.app/api/xbr";
+// const endpointUrl = "http://localhost:3000/api/xbr";
 
 // Function to test the API endpoint
 async function testApiEndpoint() {
