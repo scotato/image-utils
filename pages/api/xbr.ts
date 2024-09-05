@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import sharp from "sharp";
 import fetch from "node-fetch";
 import svg2img from "svg2img";
-import { xbr4x } from "xbr-js";
+import { xbr2x, xbr3x, xbr4x } from "xbr-js";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,7 +13,7 @@ export default async function handler(
   }
 
   try {
-    const { svgString } = req.body;
+    const { svgString, factor = 4 } = req.body;
 
     if (!svgString) {
       return res.status(400).json({ message: "SVG string is required" });
@@ -52,8 +52,9 @@ export default async function handler(
     });
 
     // Resize to 256x256
-    const width = 256;
-    const height = 256;
+    const size = xbrSize(factor);
+    const width = size;
+    const height = size;
     const resizedBuffer = await sharp(pngBuffer)
       .resize(width, height, { kernel: sharp.kernel.nearest })
       .raw()
@@ -64,7 +65,8 @@ export default async function handler(
     const uint32Array = new Uint32Array(new Uint8Array(resizedBuffer).buffer);
 
     // Apply 4x XBR upscaling
-    const xbrScaledArray = xbr4x(uint32Array, width, height);
+    const xbr = xbrFactor(factor);
+    const xbrScaledArray = xbr(uint32Array, width, height);
 
     // Convert the Uint32Array back to a buffer
     const scaledImageBuffer = Buffer.from(
@@ -86,5 +88,31 @@ export default async function handler(
   } catch (error) {
     console.error("Error processing image:", error);
     res.status(500).json({ message: "Error processing image", error: error });
+  }
+}
+
+function xbrFactor(factor: number) {
+  switch (factor) {
+    case 2:
+      return xbr2x;
+    case 3:
+      return xbr3x;
+    case 4:
+      return xbr4x;
+    default:
+      throw new Error("Invalid XBR factor");
+  }
+}
+
+function xbrSize(factor: number) {
+  switch (factor) {
+    case 2:
+      return 512;
+    case 3:
+      return 384;
+    case 4:
+      return 256;
+    default:
+      throw new Error("Invalid XBR size factor");
   }
 }
